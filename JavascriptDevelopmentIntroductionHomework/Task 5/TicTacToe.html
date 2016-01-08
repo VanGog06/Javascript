@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        #disablingDiv
+        {
+            display: none;
+            z-index:1001;
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            opacity:.00;
+            filter: alpha(opacity=00);
+        }
+    </style>
+
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <canvas id = "tictactoe" width = "210" height = "210" onclick = "getXY(event)"></canvas>
+
+    <div id = "disablingDiv"></div>
+
+    <script type = "text/javascript" src = "script/TicTacToe.js"></script>
+</body>
+</html>
