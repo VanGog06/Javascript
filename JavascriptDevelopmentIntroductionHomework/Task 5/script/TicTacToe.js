@@ -1,25 +1,29 @@
+/*
+ Implement the classical Tic-Tac-Toe game in JavaScript. Players play one after another. Use HTML to display the play
+ field and JavaScript to implement the game logic.
+ */
+
 var canvas = document.getElementById("tictactoe");
 var context = canvas.getContext("2d");
 
-var startX = 0;
-var startY = 0;
-var endX = 0;
-var endY = 0;
+var startX = 0,
+    startY = 0,
+    endX = 0,
+    endY = 0;
 
-var rectOne = false;
-var rectTwo = false;
-var rectThree = false;
-var rectFour = false;
-var rectFive = false;
-var rectSix = false;
-var rectSeven = false;
-var rectEight = false;
-var rectNine = false;
+var rectOne = false,
+    rectTwo = false,
+    rectThree = false,
+    rectFour = false,
+    rectFive = false,
+    rectSix = false,
+    rectSeven = false,
+    rectEight = false,
+    rectNine = false;
 
 var filledElements = [];
-
-var isCircle = false;
-var isWinner = false;
+var isCircle = false,
+    isWinner = false;
 
 var counter = 0;
 
@@ -68,6 +72,7 @@ function drawX(startX, startY, endX, endY) {
     context.closePath();
 }
 
+//draw circle
 function drawCircle(startX, startY) {
     context.beginPath();
     context.arc(startX + 25, startY + 25, 27, 0, 2 * Math.PI);
@@ -75,13 +80,14 @@ function drawCircle(startX, startY) {
     context.closePath();
 }
 
-//get coordinate of mouse click
+//get mouse click coordinates
 function getXY(event) {
     var x = event.clientX;
     var y = event.clientY;
 
     checkXY(x, y);
 
+    //determine where to draw
     if (x >= 0 && x <= 69) {
         if (y >= 0 && y <= 69) {
             if (rectOne === false) {
@@ -157,6 +163,7 @@ function getXY(event) {
     checkWinner();
 }
 
+//check which shape to draw
 function checkShape() {
     if (counter % 2 === 0) {
         drawX(startX, startY, endX, endY);
@@ -168,6 +175,7 @@ function checkShape() {
     }
 }
 
+//set coordinates for shape
 function checkXY(x, y) {
     //check first column
     if (x >= 0 && x <= 69) {
@@ -245,11 +253,12 @@ function checkXY(x, y) {
     }
 }
 
+//counter
 var count = (function () {
-    //counter = 0;
     return function () {return counter += 1;}
 })();
 
+//mark filled elements in an array
 function fillFilledElements(index) {
     if (isCircle)
     {
@@ -261,11 +270,13 @@ function fillFilledElements(index) {
     }
 }
 
+// check if its circle
 function checkIsCircle(index)
 {
     isCircle = filledElements[index] === "C";
 }
 
+//check if there is a winner
 function checkWinner()
 {
     var x1 = y1 = x2 = y2 = x3 = y3 = 0;
@@ -380,8 +391,7 @@ function checkWinner()
         filledElements[6] === "C") ||
         (filledElements[2] === "X" &&
         filledElements[4] === "X" &&
-        filledElements[6] === "X"))
-    {
+        filledElements[6] === "X")) {
         checkIsCircle(2);
         isWinner = true;
         x1 = 10;
@@ -391,7 +401,12 @@ function checkWinner()
         x3 = 150;
         y3 = 10;
     }
+    else
+    {
+        draw(filledElements);
+    }
 
+    //draw winning shapes
     if (isCircle && isWinner)
     {
         context.strokeStyle = "green";
@@ -400,7 +415,7 @@ function checkWinner()
         drawCircle(x3, y3);
 
         alert("Circle wins!");
-        clearCanvas();
+        refreshPage();
     }
     else if (!isCircle && isWinner)
     {
@@ -410,14 +425,35 @@ function checkWinner()
         drawX(x3, y3, x3 + 50, y3 + 50);
 
         alert("X wins!");
-        clearCanvas();
+        refreshPage();
     }
 }
 
-//clear items on canvas
-function clearCanvas() {
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    drawLines();
+//disable canvas
+function disableCanvas() {
+    document.getElementById("disablingDiv").style.display = "block";
+}
+
+//check if the game ended as draw
+function draw(array)
+{
+    var count = 0;
+    for (var i in array) {
+        if (array[i] !== "") {
+            count++;
+        }
+    }
+
+    if (count === 9)
+    {
+        alert("Draw");
+        refreshPage();
+    }
+}
+
+//refresh the page
+function refreshPage()
+{
     alert("The page will reload in 2 seconds!");
 
     setTimeout(function() {
@@ -425,9 +461,4 @@ function clearCanvas() {
     }, 2000);
 
     disableCanvas();
-}
-
-//disable the canvas
-function disableCanvas() {
-    document.getElementById("disablingDiv").style.display = "block";
 }
